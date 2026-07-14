@@ -4,7 +4,7 @@
       "id": "property_001_4271",
       "name": "Maya Rahman",
       "address": "214 Cedar Walk",
-      "createdAt": "2025-01-01T00:00:00.000Z"
+      "createdAt": "2025-01-08T00:00:00.000Z"
     }
   ],
   "Unit": [
@@ -20,15 +20,22 @@
     {
       "id": "tenant_001_6624",
       "name": "Amina Khan",
-      "email": "amina.khan.1@example.test"
+      "email": "amina.khan.1@example.test",
+      "createdAt": "2025-01-15T00:00:00.000Z"
     }
   ],
-  "Lease": [
+  "Occupancy": [
     {
-      "id": "lease_001_3128",
-      "status": "DRAFT",
-      "startsAt": "2025-02-01T00:00:00.000Z",
-      "endsAt": "2025-12-01T00:00:00.000Z",
+      "id": "occupancy_001_3128",
+      "startDate": "2025-02-01T00:00:00.000Z",
+      "endDate": null,
+      "unitId": "unit_001_8392",
+      "tenantId": "tenant_001_6624"
+    },
+    {
+      "id": "occupancy_002_4128",
+      "startDate": "2025-03-01T00:00:00.000Z",
+      "endDate": "2025-09-01T00:00:00.000Z",
       "unitId": "unit_001_8392",
       "tenantId": "tenant_001_6624"
     }
@@ -37,8 +44,18 @@
     {
       "id": "maintenancerequest_001_5910",
       "title": "MaintenanceRequest 1",
-      "status": "OPEN",
-      "openedAt": "2025-03-01T00:00:00.000Z",
+      "priority": "NORMAL",
+      "createdAt": "2025-03-01T00:00:00.000Z",
+      "resolvedAt": null,
+      "unitId": "unit_001_8392",
+      "tenantId": "tenant_001_6624"
+    },
+    {
+      "id": "maintenancerequest_002_6910",
+      "title": "MaintenanceRequest 2",
+      "priority": "URGENT",
+      "createdAt": "2025-04-03T00:00:00.000Z",
+      "resolvedAt": "2025-04-10T00:00:00.000Z",
       "unitId": "unit_001_8392",
       "tenantId": "tenant_001_6624"
     }

@@ -6,9 +6,9 @@ SeedStory was developed for OpenAI Build Week as a solo, one-week project. Codex
 
 ## Decisions made with Codex
 
-### 1. Build a vertical slice, not the full rule engine
+### 1. Build vertical slices, not the full rule engine
 
-The first implementation stops at schema parsing, relationship visualization, deterministic basic generation, table preview, and referential validation. Temporal rules and exports remain visible roadmap stages, not non-working controls.
+The first implementation stopped at schema parsing, relationship visualization, deterministic basic generation, table preview and referential validation. The second adds configurable DateTime generation, two same-record rule types, independent temporal validation, a timeline and JSON exports. Interval and conditional rules remain out of scope.
 
 ### 2. Keep domain logic outside React
 
@@ -26,6 +26,18 @@ Generation receives the numeric seed as an explicit input and uses a seeded PRNG
 
 All state is held in React memory. There is no API route, server action, database, auth layer, analytics SDK, or runtime model integration. The only server work is Next.js rendering and static asset delivery during development or hosting.
 
+### 6. Make configuration the reproducibility boundary
+
+The second slice introduced `ScenarioConfigV1`. It embeds the schema source alongside the seed, date range, model counts, DateTime strategies and rules. Serialization is tested by restoring the JSON, reparsing its schema and reproducing byte-equivalent generated values.
+
+### 7. Compile temporal constraints instead of retrying
+
+Codex helped model each same-record temporal rule as a dependency edge. DateTime fields are topologically ordered, downstream feasibility is propagated backward, and each value is selected once from a bounded interval. Cycles and empty intervals fail explicitly; there is no retry-until-valid loop.
+
+### 8. Keep validation independent from generation
+
+The validator reads the finished dataset and checks scenario boundaries plus each configured rule. Temporal issues carry model, record ID, target field, reference field, rule metadata and actual values. It does not accept a generator success flag as evidence.
+
 ## How Codex was used
 
 - Inspected the empty repository and established the Next.js/TypeScript toolchain.
@@ -33,6 +45,7 @@ All state is held in React memory. There is no API route, server action, databas
 - Implemented the Prisma subset parser and seeded generator.
 - Added React Flow relationship visualization and the developer-tool workspace.
 - Wrote focused Vitest tests around parser, generator, and validator behavior.
+- Added tests for deterministic DateTimes, range bounds, both rule directions, offsets, null probabilities, cycles, impossible windows and configuration restoration.
 - Ran lint, TypeScript, tests, and the production build, then fixed issues found by those checks.
 - Drafted repository documentation that distinguishes working behavior from roadmap items.
 
@@ -45,8 +58,9 @@ The core claims map to executable tests:
 - parser tests assert exact schema metadata;
 - generator tests assert repeatability, dependency order, and valid foreign keys;
 - validator tests prove both the valid path and deliberately corrupted data;
+- temporal tests corrupt finished values to prove the independent validator catches generator-external failures;
 - lint, strict TypeScript checking, and a production build cover integration quality.
 
 ## Next decisions
 
-The next slice should add a typed scenario configuration and only two temporal rules end-to-end (`after` and `before`) before attempting the more complex interval rules. That work should preserve the same domain boundary and add property-based tests for generated temporal invariants.
+The third slice should implement `requiredWhen` first, then `noOverlap` as a separate interval allocator with property-based tests. `belongsToActivePeriod` should wait until cross-record and cross-model reference semantics are designed explicitly. Prisma `seed.ts` export should be added only after generator mappings are configurable enough to emit credible Prisma input values.

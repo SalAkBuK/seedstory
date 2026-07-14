@@ -7,8 +7,8 @@ describe("parsePrismaSchema", () => {
     const result = parsePrismaSchema(PROPERTY_MANAGEMENT_SCHEMA);
 
     expect(result.models).toHaveLength(5);
-    expect(result.enums.map((item) => item.name)).toEqual(["LeaseStatus", "RequestStatus"]);
-    expect(result.enums[0].values).toEqual(["DRAFT", "ACTIVE", "ENDED"]);
+    expect(result.enums.map((item) => item.name)).toEqual(["RequestPriority"]);
+    expect(result.enums[0].values).toEqual(["LOW", "NORMAL", "URGENT"]);
 
     const tenant = result.models.find((model) => model.name === "Tenant");
     expect(tenant?.fields.find((field) => field.name === "id")).toMatchObject({
@@ -25,6 +25,11 @@ describe("parsePrismaSchema", () => {
       kind: "relation",
       isOptional: true,
       relation: { fields: ["tenantId"], references: ["id"] },
+    });
+    expect(request?.fields.find((field) => field.name === "priority")).toMatchObject({
+      kind: "enum",
+      type: "RequestPriority",
+      defaultValue: "NORMAL",
     });
     expect(result.diagnostics).toEqual([]);
   });

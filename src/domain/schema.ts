@@ -49,17 +49,37 @@ export interface GenerationResult {
   order: string[];
 }
 
-export interface ValidationIssue {
-  code: "MISSING_PRIMARY_KEY" | "DUPLICATE_PRIMARY_KEY" | "BROKEN_REFERENCE";
+export interface BaseValidationIssue {
+  code: "MISSING_PRIMARY_KEY" | "DUPLICATE_PRIMARY_KEY" | "BROKEN_REFERENCE" | "TEMPORAL_RULE_VIOLATION" | "SCENARIO_RANGE_VIOLATION";
   model: string;
   recordIndex: number;
   field: string;
   message: string;
 }
 
+export interface ReferentialValidationIssue extends BaseValidationIssue {
+  code: "MISSING_PRIMARY_KEY" | "DUPLICATE_PRIMARY_KEY" | "BROKEN_REFERENCE";
+}
+
+export interface TemporalValidationIssue extends BaseValidationIssue {
+  code: "TEMPORAL_RULE_VIOLATION" | "SCENARIO_RANGE_VIOLATION";
+  recordId: ScalarValue;
+  targetField: string;
+  referenceField: string;
+  violatedRule: import("./scenario-config").TemporalRule | "scenarioRange";
+  actualValues: {
+    target: ScalarValue;
+    reference: ScalarValue;
+  };
+}
+
+export type ValidationIssue = ReferentialValidationIssue | TemporalValidationIssue;
+
 export interface ValidationReport {
   valid: boolean;
   checkedRecords: number;
   checkedRelations: number;
+  checkedDateTimeValues: number;
+  checkedTemporalRules: number;
   issues: ValidationIssue[];
 }

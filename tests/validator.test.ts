@@ -8,7 +8,7 @@ describe("validateReferentialIntegrity", () => {
   const schema = parsePrismaSchema(PROPERTY_MANAGEMENT_SCHEMA);
   const generated = generateRecords(
     schema,
-    { Property: 2, Unit: 4, Tenant: 3, Lease: 3, MaintenanceRequest: 4 },
+    { Property: 2, Unit: 4, Tenant: 3, Occupancy: 3, MaintenanceRequest: 4 },
     77,
   ).data;
 

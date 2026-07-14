@@ -3,7 +3,7 @@ import { generateRecords, GenerationError } from "../src/domain/generator";
 import { parsePrismaSchema } from "../src/domain/parser";
 import { PROPERTY_MANAGEMENT_SCHEMA } from "../src/examples/property-management";
 
-const counts = { Property: 2, Unit: 4, Tenant: 3, Lease: 3, MaintenanceRequest: 5 };
+const counts = { Property: 2, Unit: 4, Tenant: 3, Occupancy: 3, MaintenanceRequest: 5 };
 
 describe("generateRecords", () => {
   const schema = parsePrismaSchema(PROPERTY_MANAGEMENT_SCHEMA);
@@ -17,15 +17,15 @@ describe("generateRecords", () => {
     const result = generateRecords(schema, counts, 42);
 
     expect(result.order.indexOf("Property")).toBeLessThan(result.order.indexOf("Unit"));
-    expect(result.order.indexOf("Unit")).toBeLessThan(result.order.indexOf("Lease"));
-    expect(result.order.indexOf("Tenant")).toBeLessThan(result.order.indexOf("Lease"));
+    expect(result.order.indexOf("Unit")).toBeLessThan(result.order.indexOf("Occupancy"));
+    expect(result.order.indexOf("Tenant")).toBeLessThan(result.order.indexOf("Occupancy"));
 
     const propertyIds = new Set(result.data.Property.map((record) => record.id));
     const unitIds = new Set(result.data.Unit.map((record) => record.id));
     const tenantIds = new Set(result.data.Tenant.map((record) => record.id));
     expect(result.data.Unit.every((record) => propertyIds.has(record.propertyId))).toBe(true);
-    expect(result.data.Lease.every((record) => unitIds.has(record.unitId))).toBe(true);
-    expect(result.data.Lease.every((record) => tenantIds.has(record.tenantId))).toBe(true);
+    expect(result.data.Occupancy.every((record) => unitIds.has(record.unitId))).toBe(true);
+    expect(result.data.Occupancy.every((record) => tenantIds.has(record.tenantId))).toBe(true);
   });
 
   it("fails clearly when a required parent count is zero", () => {
