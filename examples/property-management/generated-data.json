@@ -1,0 +1,46 @@
+{
+  "Property": [
+    {
+      "id": "property_001_4271",
+      "name": "Maya Rahman",
+      "address": "214 Cedar Walk",
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "Unit": [
+    {
+      "id": "unit_001_8392",
+      "number": "U-001",
+      "bedrooms": 2,
+      "isActive": true,
+      "propertyId": "property_001_4271"
+    }
+  ],
+  "Tenant": [
+    {
+      "id": "tenant_001_6624",
+      "name": "Amina Khan",
+      "email": "amina.khan.1@example.test"
+    }
+  ],
+  "Lease": [
+    {
+      "id": "lease_001_3128",
+      "status": "DRAFT",
+      "startsAt": "2025-02-01T00:00:00.000Z",
+      "endsAt": "2025-12-01T00:00:00.000Z",
+      "unitId": "unit_001_8392",
+      "tenantId": "tenant_001_6624"
+    }
+  ],
+  "MaintenanceRequest": [
+    {
+      "id": "maintenancerequest_001_5910",
+      "title": "MaintenanceRequest 1",
+      "status": "OPEN",
+      "openedAt": "2025-03-01T00:00:00.000Z",
+      "unitId": "unit_001_8392",
+      "tenantId": "tenant_001_6624"
+    }
+  ]
+}
